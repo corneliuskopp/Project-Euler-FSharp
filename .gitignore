@@ -1,0 +1,4 @@
+*.DotSettings
+*.suo
+Project Euler FSharp/bin/*
+Project Euler FSharp/obj/*
