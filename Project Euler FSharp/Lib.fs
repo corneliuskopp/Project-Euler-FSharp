@@ -19,17 +19,8 @@ let primes =
 
     prime 2I Map.empty
 
-let primefactors x =
-//    let handlePrime number prime = 
-//            if number % prime = 0 then
-//                let newNumber = number / prime
-//                prime :: (handlePrime newNumber prime)
-//            else
-//                []
-//
-//
-//    let checkValue number = handlePrime x 2
-//    
-//    checkValue x
-    1
+let rec factorise n =
+    if n = 1 then [] else
+    let a = [2 .. n] |> List.find (fun x -> n % x = 0)
+    a :: factorise (n / a)
     
