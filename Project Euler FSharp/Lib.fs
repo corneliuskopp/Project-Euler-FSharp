@@ -18,9 +18,3 @@ let primes =
         }
 
     prime 2I Map.empty
-
-let rec factorise n =
-    if n = 1 then [] else
-    let a = [2 .. n] |> List.find (fun x -> n % x = 0)
-    a :: factorise (n / a)
-    

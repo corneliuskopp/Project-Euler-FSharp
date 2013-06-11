@@ -3,5 +3,7 @@
 
 [<EntryPoint>]
 let main argv = 
-    e10.all
+    //e10.all
+    e20.all
+    //printfn "%O" e20.five
     0 // return an integer exit code
