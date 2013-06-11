@@ -18,3 +18,5 @@ let primes =
         }
 
     prime 2I Map.empty
+
+let maxOrZeroDouble l = if List.isEmpty l then 0.0 else List.max l

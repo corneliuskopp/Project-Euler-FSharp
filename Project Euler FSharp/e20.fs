@@ -2,12 +2,13 @@
 
 open MathNet.Numerics.LinearAlgebra.Double
 open Microsoft.FSharp.Core.ExtraTopLevelOperators
+open Lib
 
 let one =
-    let input = array2D [[08.0; 02.0; 22.0; 97.0; 38.0; 15.0; 00.0; 40.0; 00.0];
+    let input2 = array2D [[08.0; 02.0; 22.0; 97.0; 38.0; 15.0; 00.0; 40.0; 00.0];
                         [49.0; 49.0; 99.0; 40.0; 17.0; 81.0; 18.0; 57.0; 60.0]]
 
-    let input2 = array2D [[08.0; 2.0; 22.0; 97.0; 38.0; 15.0; 0.0; 40.0; 0.0; 75.0; 4.0; 5.0; 7.0; 78.0; 52.0; 12.0; 50.0; 77.0; 91.0; 08.0];
+    let input = array2D [[08.0; 2.0; 22.0; 97.0; 38.0; 15.0; 0.0; 40.0; 0.0; 75.0; 4.0; 5.0; 7.0; 78.0; 52.0; 12.0; 50.0; 77.0; 91.0; 08.0];
                     [49.0; 49.0; 99.0; 40.0; 17.0; 81.0; 18.0; 57.0; 60.0; 87.0; 17.0; 40.0; 98.0; 43.0; 69.0; 48.0; 04.0; 56.0; 62.0; 00.0];
                     [81.0; 49.0; 31.0; 73.0; 55.0; 79.0; 14.0; 29.0; 93.0; 71.0; 40.0; 67.0; 53.0; 88.0; 30.0; 03.0; 49.0; 13.0; 36.0; 65.0];
                     [52.0; 70.0; 95.0; 23.0; 04.0; 60.0; 11.0; 42.0; 69.0; 24.0; 68.0; 56.0; 01.0; 32.0; 56.0; 71.0; 37.0; 02.0; 36.0; 91.0];
@@ -48,13 +49,37 @@ let one =
             let prod = m.[x,y] * m.[x+1,y] * m.[x+2,y] * m.[x+3,y]
             prod :: findProdVert m (x + 1) y
 
-    let horizList = findProdHoriz matrix 0 0
-    let horiz = if List.isEmpty horizList then 0.0 else List.max horizList
-    printfn "Horiz: %A" horiz
-    
-    let vertList = findProdVert matrix 0 0
-    let vert = if List.isEmpty vertList then 0.0 else List.max vertList
-    printfn "Vert:  %A" vert
+    let findProdDiag1 (m:DenseMatrix) a b =
+        let maxX = m.RowCount - 1
+        let maxY = m.ColumnCount - 1
+
+        let rec findRight x y =
+            if x = maxX && y = maxY then
+                [m.[x,y]]
+            else if y = maxY then
+                m.[x,y] :: findRight maxX (x + 1)
+            else
+                m.[x,y] :: findRight (x - 1) (y + 1)
+
+        let rec findDown x y = 
+            if x = 0 then
+                m.[x,y] :: findDown (y + 1) 0
+            else if x = m.RowCount then
+                findRight (x - 1) 1 
+            else
+                m.[x,y] :: findDown (x - 1) (y + 1)
+
+        let result = findDown a b
+        result
+
+//    let horiz = maxOrZeroDouble (findProdHoriz matrix 0 0)
+//    printfn "Horiz: %A" horiz
+//    
+//    let vert = maxOrZeroDouble (findProdVert matrix 0 0)
+//    printfn "Vert:  %A" vert
+
+    let diag1 = maxOrZeroDouble (findProdDiag1 matrix 0 0)
+    printfn "Diag:  %A" diag1
 
 let all = 
     printfn "%A" one
