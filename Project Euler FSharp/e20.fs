@@ -93,21 +93,23 @@ let one =
     List.max [horiz, vert, diag1]
 
 let two = 
+    // http://www.urch.com/forums/gre-math/15597-find-all-positive-divisors-number.html
     let nextTriangleOption = (fun (step, acc) -> 
         let value = acc + step + 1
-        let factorCount = Seq.length (factors value)
+        
+        let factorCount = 
+               Seq.groupBy (fun v -> v) (primeFactors value)
+            |> Map.ofSeq
+            |> Map.map (fun k v -> Seq.length v)
+            |> Map.fold (fun acc k v -> acc * (v + 1)) 1
+                    
         Some((value,factorCount), ((step + 1), value))
         )
     let triangleSeq = Seq.unfold nextTriangleOption (0, 0)
-
-    let asdf = Seq.takeWhile (fun (v,c) -> c <= 8) triangleSeq
-
-    for x in asdf do
-        printfn "%A" x
-
-    //let (value, count) = Seq.exactlyOne (Seq.take 1 (Seq.skipWhile (fun (value,factorCount) -> factorCount >= 500) triangleSeq))
-    //value
-
+        
+    let skipBoringValuesSeq = Seq.skipWhile (fun (v,c) -> c < 500) triangleSeq
+    Seq.exactlyOne (Seq.take 1 skipBoringValuesSeq)
+    
 let all = 
     //printfn "one: %A" one
     printfn "two: %A" two

@@ -19,11 +19,14 @@ let primes =
 
     prime 2I Map.empty
 
-let maxOrZeroDouble l = if List.isEmpty l then 0.0 else List.max l
+// http://amirrajan.net/Blog/prime-factors-kata-in-fsharp
+let primeFactors number = 
+    let rec factorsOf number factor accumulator = 
+        if number > 1 && number % factor = 0 then 
+            factorsOf (number / factor) (factor) (List.append accumulator [factor])
+        else if number > 1 then 
+            factorsOf (number) (factor + 1) (accumulator)
+        else accumulator
+    factorsOf number 2 []
 
-let factors x = 
-    seq { 
-        for i in 1 .. (x/2) do 
-            if x % i = 0 then yield i 
-        yield x
-    }
+let maxOrZeroDouble l = if List.isEmpty l then 0.0 else List.max l
