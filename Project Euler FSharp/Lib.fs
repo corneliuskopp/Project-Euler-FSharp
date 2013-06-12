@@ -20,3 +20,10 @@ let primes =
     prime 2I Map.empty
 
 let maxOrZeroDouble l = if List.isEmpty l then 0.0 else List.max l
+
+let factors x = 
+    seq { 
+        for i in 1 .. (x/2) do 
+            if x % i = 0 then yield i 
+        yield x
+    }

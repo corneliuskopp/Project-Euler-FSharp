@@ -87,14 +87,27 @@ let one =
             result
 
     let horiz = maxOrZeroDouble (findProdHoriz matrix)
-    printfn "Horiz: %A" horiz
-    
     let vert = maxOrZeroDouble (findProdVert matrix)
-    printfn "Vert:  %A" vert
-
     let diag1 = maxOrZeroDouble (findProdDiag1 matrix)
-    printfn "Diag:  %A" diag1
+
+    List.max [horiz, vert, diag1]
+
+let two = 
+    let nextTriangleOption = (fun (step, acc) -> 
+        let value = acc + step + 1
+        let factorCount = Seq.length (factors value)
+        Some((value,factorCount), ((step + 1), value))
+        )
+    let triangleSeq = Seq.unfold nextTriangleOption (0, 0)
+
+    let asdf = Seq.takeWhile (fun (v,c) -> c <= 8) triangleSeq
+
+    for x in asdf do
+        printfn "%A" x
+
+    //let (value, count) = Seq.exactlyOne (Seq.take 1 (Seq.skipWhile (fun (value,factorCount) -> factorCount >= 500) triangleSeq))
+    //value
 
 let all = 
-    //printfn "%A" one
-    printfn "%A" two
+    //printfn "one: %A" one
+    printfn "two: %A" two
