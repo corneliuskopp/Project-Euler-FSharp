@@ -55,6 +55,7 @@
   <ItemGroup>
     <None Include="App.config" />
     <Compile Include="Lib.fs" />
+    <Compile Include="e20.Data.fs" />
     <Compile Include="e10.fs" />
     <Compile Include="e20.fs" />
     <Compile Include="Program.fs" />
